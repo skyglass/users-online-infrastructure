@@ -1,2 +1,2 @@
-# users-online-infrastructure
-Users Online AWS Infrastructure with Terraform, Kubernetes, ExternalDNS and Ingress Load Blan
+# petclinic-online-infrastructure
+Petclinic Online AWS Infrastructure with Terraform

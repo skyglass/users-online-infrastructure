@@ -1,0 +1,48 @@
+name: Petclinic Online Environment Provisioning
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: "eu-central-1"
+ 
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install aws cli
+      id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1.0.3
+      with:
+        version: 2
+
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.2.7
+
+    - name: Terraform fmt
+      run: terraform fmt
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      run: terraform plan -no-color
+    
+    - name: Terraform Apply
+      run: terraform apply -no-color -auto-approve 
+
+    - name: Upload kubeconfig file
+      uses: actions/upload-artifact@v2
+      with:
+        name: kubeconfig
+        path: kubeconfig
