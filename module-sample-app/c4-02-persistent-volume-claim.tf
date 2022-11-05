@@ -14,3 +14,13 @@ resource "kubernetes_persistent_volume_claim_v1" "pvc" {
     }
   }
 }
+
+resource "aws_volume_attachment" "mysql_data" {
+  depends_on = ["null_resource.stop_mysql_service2"]
+  device_name = "/dev/xvdf"
+  volume_id = "${aws_ebs_volume.create_volume.0.id}"
+  instance_id = "i-0d48be4266da"
+  skip_destroy = true
+  force_detach = true
+}
+
